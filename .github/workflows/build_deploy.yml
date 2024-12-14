@@ -25,12 +25,15 @@ jobs:
       run: python .github/workflows/build_sources.py
     - name: Run and Check Glossario Script
       run: |
-        python .github/workflows/check_glossario.py | tee output.log
-        if grep -q "FAIL" output.log; then
-          echo "❌ FAIL found in output"
-          exit 1
-        else
-          echo "✅ No FAIL found in output"
+        result=$(python .github/workflows/check_glossario.py)
+        echo "Script output: $result"
+        echo "result=$result" >> $GITHUB_ENV  # Salva l'output nella variabile d'ambiente
+
+    - name: Check for FAIL in output
+      run: |
+        if [[ $(echo "$result" | awk '{print $1}') == "FAIL" ]]; then
+          echo "Script failed!"
+          exit 1 
         fi
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
