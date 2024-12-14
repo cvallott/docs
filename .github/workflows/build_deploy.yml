@@ -27,9 +27,12 @@ jobs:
       run: |
         result=$(python .github/workflows/check_glossario.py)
         echo "Script output: $result"
-        if [[ $(echo "$result" | awk '{print $1}') == "FAIL" ]]; then
+        first_word=$(echo "$result" | head -n 1 | awk '{print $1}')
+
+        # Controlla se la prima parola è "FAIL"
+        if [[ "$first_word" == "FAIL" ]]; then
           echo "Script failed!"
-          exit 1 
+          exit 1
         fi
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
