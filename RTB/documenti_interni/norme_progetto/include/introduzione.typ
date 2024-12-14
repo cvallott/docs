@@ -1,7 +1,7 @@
 #import "/template/template.typ": glossario
 = Introduzione
 == Scopo del documento
-Questo documento nasce con l'intenzione di documentare il #glossario[way of working] del gruppo al fine di gestire ed organizzare le attività di #glossario[progetto] nella maniera più efficiente possibile. Tutte le modifiche effettuate all'interno dei documenti saranno registrate all'interno del registro delle modifiche (#glossario[changelog]).
+AAA Questo documento nasce con l'intenzione di documentare il #glossario[way of working] del gruppo al fine di gestire ed organizzare le attività di #glossario[progetto] nella maniera più efficiente possibile. Tutte le modifiche effettuate all'interno dei documenti saranno registrate all'interno del registro delle modifiche (#glossario[changelog]).
 
 Abbiamo deciso di seguire lo standard ISO/IEC 12207:1995 che definisce i processi di ciclo di vita, ovvero l'insieme dei processi che descrivono e organizzano il software dalla sua concezione iniziale fino al suo ritiro.
 La scelta di aderire ad uno standard è dovuta al fatto che ci fornisce delle regole comuni ottimali, le quali ci permetteranno di raggiungere l'economicità (combinazione di efficienza ed efficacia).
