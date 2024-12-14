@@ -23,13 +23,15 @@ jobs:
         sudo mv /tmp/typst*/typst /bin/typst
     - name: Build sources
       run: python .github/workflows/build_sources.py
-    - name: Glossario
+    - name: Run and Check Glossario Script
       run: |
-          python .github/workflows/check_glossario.py | tee output.log
-          if grep -q "FAIL" output.log; then
-            echo "FAIL found in output"
-            exit 1
-          fi
+        python .github/workflows/check_glossario.py | tee output.log
+        if grep -q "FAIL" output.log; then
+          echo "❌ FAIL found in output"
+          exit 1
+        else
+          echo "✅ No FAIL found in output"
+        fi
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
