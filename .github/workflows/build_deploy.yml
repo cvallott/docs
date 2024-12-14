@@ -27,10 +27,6 @@ jobs:
       run: |
         result=$(python .github/workflows/check_glossario.py)
         echo "Script output: $result"
-        echo "result=$result" >> $GITHUB_ENV  # Salva l'output nella variabile d'ambiente
-
-    - name: Check for FAIL in output
-      run: |
         if [[ $(echo "$result" | awk '{print $1}') == "FAIL" ]]; then
           echo "Script failed!"
           exit 1 
