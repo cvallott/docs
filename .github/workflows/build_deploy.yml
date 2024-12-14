@@ -24,7 +24,12 @@ jobs:
     - name: Build sources
       run: python .github/workflows/build_sources.py
     - name: Glossario
-      run: python .github/workflows/check_glossario.py
+      run: |
+          python .github/workflows/check_glossario.py | tee output.log
+          if grep -q "FAIL" output.log; then
+            echo "FAIL found in output"
+            exit 1
+          fi
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
