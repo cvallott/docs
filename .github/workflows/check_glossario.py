@@ -144,6 +144,7 @@ if __name__ == "__main__":
     termini = get_from_glossario(FILE_GLOSSARIO)
     termini_contenuti = get_termini_contenuti_in_altri(termini)
     sources_to_check = [] # File da controllare
+    fail_found = False  # Variabile per tracciare i fallimenti
 
     if len(sys.argv) == 1:
         sources = glob.glob("{}/**/*.typ".format(REPO_DIR), recursive=True)
@@ -166,3 +167,9 @@ if __name__ == "__main__":
         source_text = get_file_text(source)
         source_text = filter_file(source, source_text)
         check(source, source_text, termini, termini_contenuti)
+        if "FAIL" in source_text:
+            fail_found = True  # Indica che è stato trovato un fallimento
+
+    # Ritorna codice di uscita 1 se ci sono fallimenti
+    if fail_found:
+        sys.exit(1)
