@@ -4,7 +4,7 @@ FILE_GLOSSARIO = 'RTB/documenti_interni/glossario/glossario.typ'
 REPO_DIR       = 'RTB'
 
 def get_file_text(f):
-    f = open(f, "r", encoding="utf-8", errors="ignore")
+    f = open(f, "r", encoding="utf-8")
     text = f.read()
     f.close()
     return text
