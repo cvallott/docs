@@ -43,9 +43,9 @@ def check_single_term(termine, text):
             return (x, False, termine)
 
 # Controllo dei termini nel file
-def check(f, text, termini_glossario, termini_contenuti):
+def check(f, text, termini_glossario, termini_contenuti, fail_found_ref):
     print("-----------------------------")
-    print("Serching terms in {}".format(f))
+    print("Searching terms in {}".format(f))
     for termine in termini_glossario:
         if len(termine) == 1:
             termine = termine[0]
@@ -55,12 +55,10 @@ def check(f, text, termini_glossario, termini_contenuti):
                 print("OK: {}".format(termine))
             elif res and res[1] == False:
                 x = res[0]
-                print("FAIL: \"{}\" was not found inside #glossario[{}]".format(termine,termine), file=sys.stderr)
+                print("FAIL: \"{}\" was not found inside #glossario[{}]".format(termine, termine), file=sys.stderr)
                 print("Text snippet:\n====\n{}\n====".format(text[x.span()[0]-40:x.span()[1]+40]), file=sys.stderr)
-            
+                fail_found_ref[0] = True  # Traccia il fallimento
 
-        # In questo caso devo controllare che la variante che è scritta prima sia corretta
-        # Quindi cerco tutte le varianti e prendo quella con lo span()[0] minore
         else:
             matches = []
             for variante_termine in termine:
@@ -68,19 +66,19 @@ def check(f, text, termini_glossario, termini_contenuti):
                 if res:
                     span = res[0].span()
                     matches.append((span, res[1], res[2]))
-                
-            matches.sort(key=lambda m: m[0][0]) # Sorting in base allo span()[0]
+            
+            matches.sort(key=lambda m: m[0][0])  # Sorting in base allo span()[0]
 
             if len(matches) > 0:
-                match_term = matches[0] # Primo match
+                match_term = matches[0]  # Primo match
                 x = match_term[0]
                 termine = match_term[2]
                 if match_term[1]:
                     print("OK: {}".format(termine))
                 else:
-                    print("FAIL: \"{}\" was not found inside #glossario[{}]".format(termine,termine), file=sys.stderr)
+                    print("FAIL: \"{}\" was not found inside #glossario[{}]".format(termine, termine), file=sys.stderr)
                     print("Text snippet:\n====\n{}\n====".format(text[x[0]-40:x[1]+40]), file=sys.stderr)
-                
+                    fail_found_ref[0] = True  # Traccia il fallimento
                 
 
 def filter_file(f, text):
@@ -144,6 +142,7 @@ if __name__ == "__main__":
     termini = get_from_glossario(FILE_GLOSSARIO)
     termini_contenuti = get_termini_contenuti_in_altri(termini)
     sources_to_check = [] # File da controllare
+    fail_found = [False]  # Usa una lista per permettere la modifica all'interno delle funzioni
 
     if len(sys.argv) == 1:
         sources = glob.glob("{}/**/*.typ".format(REPO_DIR), recursive=True)
@@ -165,4 +164,8 @@ if __name__ == "__main__":
     for source in sources_to_check:
         source_text = get_file_text(source)
         source_text = filter_file(source, source_text)
-        check(source, source_text, termini, termini_contenuti)
+        check(source, source_text, termini, termini_contenuti, fail_found)
+
+    # Ritorna codice di uscita 1 se ci sono fallimenti
+    if fail_found[0]:
+        sys.exit(1)
