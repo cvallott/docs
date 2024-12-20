@@ -85,4 +85,4 @@ if __name__ == "__main__":
             print(source_text)
             sys.exit(1)
         if res > 40:
-            print("{} \t {}".format(res, os.path.abspath(source).split("RTB\\")[1]))
+            print("{} \t {}".format(res, os.path.abspath(source).split("RTB/")[1]))
